@@ -1,0 +1,11 @@
+harvester states
+
+awaiting_instructions - awaiting instructions from dispatcher
+loading_fuel
+enroute_y - in transit to harvest site
+enroute_z
+enroute_x
+
+mining_down - digs down, searches for non-blacklist blocks to harvest
+mining_down_a - spinning to look for stuff to take
+mining_down_b - spinning to move into position to begin the return up
