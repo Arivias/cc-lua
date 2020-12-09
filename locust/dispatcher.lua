@@ -4,6 +4,8 @@ end
 
 print("Locust Dispatcher 2.0a")
 
+if fs.exists("/disk/job") then shell.run("rm /disk/job") end
+
 config = fs.open("/disk/cfg","r")
 
 y_spawn = readNum(config) -- global y of
