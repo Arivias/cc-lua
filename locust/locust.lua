@@ -252,7 +252,7 @@ while true do
 		if targetDesired() then harvest() end
 		state[level_spin_count] = (state[level_spin_count] + 1) % 3
 		if state[level_spin_count] == 0 then
-			if state[at_bedrock] then
+			if state[at_bedrock] == 1 then
 				state[mode] = "return_to_surface"
 			else
 				state[mode] = "mining_down"
