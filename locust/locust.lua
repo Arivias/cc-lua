@@ -10,6 +10,7 @@ target = {} -- position to begin harvest
 y_offset = {} -- how high the local origin is above world origin, used for computing fuel cost
 at_bedrock = {} -- if we have completed a down dig
 rot_dir = {} -- spin dig direction
+level_spin_count = {}
 
 --Load the blacklist from storage
 function loadBlacklist()
@@ -38,6 +39,7 @@ function loadState()
 		state[y_offset] = readNum(handle)
 		state[at_bedrock] = readNum(handle)
 		state[rot_dir] = handle.readLine()
+		state[level_spin_count] = readNum(handle)
 		handle.close()
 	else
 		state[pos] = vector.new(0,0,0)
@@ -46,6 +48,7 @@ function loadState()
 		state[mode] = "awaiting_instructions"
 		state[at_bedrock] = 0
 		state[rot_dir] = "r"
+		state[level_spin_count] = 0
 
 		--first time install
 		shell.run("cp disk/startup.lua startup.lua")
@@ -63,6 +66,7 @@ function saveState()
 	handle.writeLine(tostring(state[y_offset]))
 	handle.writeLine(tostring(state[at_bedrock]))
 	handle.writeLine(state[rot_dir])
+	handle.writeLine(tostring(state[level_spin_count]))
 	handle.close()
 end
 
@@ -161,6 +165,10 @@ function targetDesired()
 	return b and blacklist[v.name] == nil
 end
 
+function harvest()
+	turtle.dig()
+end
+
 
 --------
 --MAIN--
@@ -234,62 +242,28 @@ while true do
 
 	elseif state[mode] == "mining_down" then
 		if mineDown() then state[at_bedrock] = 0 else state[at_bedrock] = 1 end
+		state[level_spin_count] = 0
 		state[mode] = "mining_down_a"
 		saveState()
 
 	elseif state[mode] == "mining_down_a" then
-		start = (state[rot] == 3 and state[rot_dir]=="l") or (state[rot] == 1 and state[rot_dir]=="r") -- if this is the first cycle on this layer
-		if start then if targetDesired() then turtle.dig() end end
-		if state[rot_dir] == "r" then turnRight() else turnLeft() end
-		if targetDesired() then turtle.dig() end
-		if (state[rot] == 3 and state[rot_dir]=="r") or (state[rot] == 1 and state[rot_dir]=="l") then
-			if state[rot_dir] == "r" then state[rot_dir] = "l" else state[rot_dir] = "r" end
-			if state[at_bedrock] == 0 then state[mode] = "mining_down" else state[mode] = "mining_down_b" end
-			saveState()
+		if state[level_spin_count] == 0 and targetDesired() then harvest() end
+		turnRight()
+		if targetDesired() then harvest() end
+		state[level_spin_count] = (state[level_spin_count] + 1) % 3
+		if state[level_spin_count] == 0 then
+			if state[at_bedrock] then
+				state[mode] = "return_to_surface"
+			else
+				state[mode] == "mining_down"
+			end
 		end
 
-	elseif state[mode] == "mining_down_b" then
-		if state[rot] == 0 then
-			mineForward()
-			state[mode] = "mining_up"
-			state[rot_dir] = "r"
-			turnLeft() -- saves state
-		elseif state[rot] == 1 then turnLeft()
-		else turnRight() end
-	
-	elseif state[mode] == "mining_up" then
-		start = (state[rot] == 3 and state[rot_dir]=="r") or (state[rot] == 1 and state[rot_dir]=="l") -- if this is the first cycle on this layer
-		if start then if targetDesired() then turtle.dig() end end
-		if state[rot_dir] == "r" then turnRight() else turnLeft() end
-		if targetDesired() then turtle.dig() end
-		if (state[rot] == 3 and state[rot_dir]=="l") or (state[rot] == 1 and state[rot_dir]=="r") then
-			if state[rot_dir] == "r" then state[rot_dir] = "l" else state[rot_dir] = "r" end
-			if state[pos].y ~= state[target].y then mineUp() else state[mode] = "mining_next" end
-			saveState()
-		end
-	
-	elseif state[mode] == "mining_next" then
-		dropBlacklistedBlocks()
-		state[harvest_length] = state[harvest_length] - 1
-		if state[harvest_length] > 0 then
-			state[mode] = "mining_next_harvest"
-		else
-			up()
-			up()
+	elseif state[mode] == "return_to_surface"
+		if state[pos].y < state[target].y then up() else
 			state[mode] = "return_x"
+			saveState()
 		end
-		saveState()
-
-	elseif state[mode] == "mining_next_harvest" then
-		if state[rot] == 0 then
-			mineForward()
-			mineForward()
-			mineForward()
-			state[mode] = "mining_down"
-			state[rot_dir] = "r"
-			turnLeft() -- saves state
-		elseif state[rot] == 1 then turnLeft()
-		else turnRight() end
 
 	elseif state[mode] == "return_x" then
 		if state[pos].x == -3 then
