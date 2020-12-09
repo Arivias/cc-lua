@@ -1,5 +1,5 @@
 local args = {...}
-local version = "1.41"
+local version = "1.42"
 
 local branch = "main"
 local do_install = true
