@@ -260,7 +260,7 @@ while true do
 		end
 
 	elseif state[mode] == "return_to_surface" then
-		if state[pos].y < state[target].y then
+		if state[pos].y < state[target].y+2 then
 			up()
 		else
 			state[mode] = "return_x"
