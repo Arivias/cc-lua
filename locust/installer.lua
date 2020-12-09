@@ -5,7 +5,7 @@ local branch = "main"
 local do_install = true
 
 local function cb(url)
-	return url.."?cb=%x":format(math.random(0, 2^30))
+	return url..("?cb=%x"):format(math.random(0, 2^30))
 end
 
 local function install(branch, remote, filename)
