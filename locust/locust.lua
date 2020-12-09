@@ -255,7 +255,7 @@ while true do
 			if state[at_bedrock] then
 				state[mode] = "return_to_surface"
 			else
-				state[mode] == "mining_down"
+				state[mode] = "mining_down"
 			end
 		end
 
