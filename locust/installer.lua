@@ -20,9 +20,9 @@ if #args > 0 then
 		remote.close()
 		h.close()
 		print("Done!")
-	else
-		print("Fetching branch: "..args[1])
-		branch = args[1]
+	elseif args[1] == "branch" or args[1] == "-b"
+		print("Fetching branch: "..args[2])
+		branch = args[2]
 	end
 else
 	print("Installing locust to disk...")
