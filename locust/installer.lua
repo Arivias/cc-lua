@@ -38,8 +38,10 @@ if #args > 0 then
 		branch = args[2]
 	elseif args[1] == "version" then
 		print("Version: "..version)
+		do_install = false
 	else
 		print("Usage: locust-installer [args]\n\n\targs:\n\t\t-b branch | Install from a specific branch\n\n\thelp | Display this info\n\tversion | get the version("..version..")")
+		do_install = false
 	end
 end
 
