@@ -20,7 +20,7 @@ config.close()
 for row = 1,l_grid+1 do
 	for col = 1,w_grid+1 do
 
-		x = x_grid + 4*col + (2*(row - 1)%5)
+		x = x_grid + 4*(col-1) + (2*(row - 1)%5)
 		z = z_grid + col-1
 
 		h = fs.open("job","w")
