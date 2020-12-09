@@ -6,6 +6,11 @@ function readStr(h)
 	return tostring(h.readLine())
 end
 
+
+print("Locust Dispatcher ~ 2.02q EXPERIMENTAL:quarry")
+
+if fs.exists("/disk/job") then shell.run("rm /disk/job") end
+
 config = fs.open("disk/cfg","r")
 mode = readStr(config)
 

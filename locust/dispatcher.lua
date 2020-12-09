@@ -2,7 +2,7 @@ function readNum(h)
 	return tonumber(h.readLine())
 end
 
-print("Locust Dispatcher ~ EXPERIMENTAL:quarry")
+print("Locust Dispatcher ~ 2.02q EXPERIMENTAL:quarry")
 
 if fs.exists("/disk/job") then shell.run("rm /disk/job") end
 
@@ -26,16 +26,17 @@ for row = 1,w_grid do
 		x = x_grid + 5*(col-1) + (2*(row-1)%5)
 		z = z_grid + row-1
 
-		h = fs.open("job","w")
+		if  not(x>(x_grid+l_grid) or z>(z_grid+w_grid)) then
+			h = fs.open("job","w")
 
-		if not (x>(x_grid+l_grid) or z>(z_grid+w_grid)) do
-		h.writeLine(tostring(x))
-		h.writeLine(tostring(y_grid))
-		h.writeLine(tostring(z))
+			h.writeLine(tostring(x))
+			h.writeLine(tostring(y_grid))
+			h.writeLine(tostring(z))
 
-		h.writeLine(tostring(y_spawn))
+			h.writeLine(tostring(y_spawn))
 
-		h.close()
+			h.close()
+		end
 
 		while fs.exists("/disk/job") do sleep(0.5) end
 
