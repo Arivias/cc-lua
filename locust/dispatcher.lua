@@ -2,7 +2,7 @@ function readNum(h)
 	return tonumber(h.readLine())
 end
 
-print("Locust Dispatcher 2.0a")
+print("Locust Dispatcher 2.0a1")
 
 if fs.exists("/disk/job") then shell.run("rm /disk/job") end
 
@@ -14,17 +14,16 @@ x_grid = readNum(config) -- grid corner coords
 y_grid = readNum(config)
 z_grid = readNum(config)
 
-d_grid = readNum(config) -- (y) depth of desired area (should be negative) -- DOES NOTHING
 w_grid = readNum(config) -- (z) width of desired area
-l_grid = readNum(config) -- (x) length of desired area
+l_grid = math.ceil(readNum(config)/5) -- (x) length of desired area
 
 config.close()
 
 -- write a list of dig spots in the grid area
-for row = 1,l_grid+1 do
-	for col = 1,w_grid+1 do
+for row = 1,w_grid do
+	for col = w_grid,1,-1 do
 
-		x = x_grid + 4*(col-1) + (2*(row - 1)%5)
+		x = x_grid + 5*(col-1) + (2*(row-1)%5)
 		z = z_grid + col-1
 
 		h = fs.open("job","w")

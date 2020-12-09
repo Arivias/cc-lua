@@ -56,7 +56,7 @@ if do_install then
 	install(branch, "blacklist")
 	if not fs.exists("disk/cfg") then
 		h = fs.open("disk/cfg","w")
-		h.write("[Y_VAL]\n[X]\n[Y]\n[Z]\n1\n[WIDTH]\n[LENGTH]")
+		h.write("[Y_VAL]\n[X]\n[Y]\n[Z]\n[WIDTH]\n[LENGTH]")
 		h.close()
 	end
 end
