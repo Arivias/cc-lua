@@ -1,10 +1,11 @@
 local args = {...}
+local branch = "main"
 
-local function install(remote, filename)
+local function install(branch, remote, filename)
 	if not filename then filename = remote end
 	print("fetching "..filename.."...")
 	local handle = fs.open("disk/"..filename,"w")
-	local r = http.get("https://raw.githubusercontent.com/Arivias/cc-lua/main/locust/"..remote)
+	local r = http.get("https://raw.githubusercontent.com/Arivias/cc-lua/"..branch.."/locust/"..remote)
 	handle.write(r.readAll())
 	r.close()
 	handle.close()
@@ -20,11 +21,12 @@ if #args > 0 then
 		h.close()
 		print("Done!")
 	else
-		print("Usage: locust-installer.lua [update]")
+		print("Fetching branch: "..args[1])
+		branch = args[1]
 	end
 else
 	print("Installing locust to disk...")
-	install("locust.lua", "startup.lua")
-	install("dispatcher.lua")
-	install("blacklist")
+	install(branch, "locust.lua", "startup.lua")
+	install(branch, "dispatcher.lua")
+	install(branch, "blacklist")
 end
