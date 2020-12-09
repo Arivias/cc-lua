@@ -1,5 +1,5 @@
 local args = {...}
-local version = "1.4"
+local version = "1.41"
 
 local branch = "main"
 local do_install = true
@@ -25,7 +25,7 @@ if #args > 0 then
 		local remote = http.get("https://raw.githubusercontent.com/Arivias/cc-lua/main/locust/installer.lua")
 		local h = fs.open("locust-installer.lua","w")
 		r = remote.readAll()
-		if #r > 10 then
+		if r then
 			h.write(r)
 			remote.close()
 			h.close()
