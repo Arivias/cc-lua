@@ -21,7 +21,7 @@ config.close()
 
 -- write a list of dig spots in the grid area
 for row = 1,w_grid do
-	for col = w_grid,1,-1 do
+	for col = l_grid,1,-1 do
 
 		x = x_grid + 5*(col-1) + (2*(row-1)%5)
 		z = z_grid + col-1
