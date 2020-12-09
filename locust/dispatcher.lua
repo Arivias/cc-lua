@@ -2,6 +2,8 @@ function readNum(h)
 	return tonumber(h.readLine())
 end
 
+print("Locust Dispatcher 2.0a")
+
 config = fs.open("disk/cfg","r")
 
 y_spawn = readNum(config) -- global y of

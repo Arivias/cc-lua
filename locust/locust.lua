@@ -168,7 +168,10 @@ end
 --------
 --MAIN--
 --------
-if not turtle then exit() end
+if not turtle then
+	shell.run("disk/dispatcher.lua")
+	crash()
+end
 
 loadState()
 loadBlacklist()
