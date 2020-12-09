@@ -1,4 +1,6 @@
 local args = {...}
+local version = "1.4"
+
 local branch = "main"
 local do_install = true
 
@@ -7,7 +9,10 @@ local function install(branch, remote, filename)
 	print("fetching "..filename.."...")
 	local handle = fs.open("disk/"..filename,"w")
 	local r = http.get("https://raw.githubusercontent.com/Arivias/cc-lua/"..branch.."/locust/"..remote)
-	print(r.getResponseCode())
+	if not r then
+		print("File(or branch) does not exist.")
+		return
+	end
 	handle.write(r.readAll())
 	r.close()
 	handle.close()
@@ -31,8 +36,10 @@ if #args > 0 then
 	elseif args[1] == "branch" or args[1] == "-b" then
 		print("Fetching branch: "..args[2])
 		branch = args[2]
+	elseif args[1] == "version" then
+		print("Version: "..version)
 	else
-		print("Usage: locust-installer [update] [-b branchname]")
+		print("Usage: locust-installer [args]\n\n\targs:\n\t\t-b branch | Install from a specific branch\n\n\thelp | Display this info\n\tversion | get the version("..version..")")
 	end
 end
 
