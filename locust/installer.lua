@@ -4,11 +4,15 @@ local version = "1.42"
 local branch = "main"
 local do_install = true
 
+local function cb(url)
+	return url.."?cb=%x":format(math.random(0, 2^30))
+end
+
 local function install(branch, remote, filename)
 	if not filename then filename = remote end
 	print("fetching "..filename.."...")
 	local handle = fs.open("disk/"..filename,"w")
-	local r = http.get("https://raw.githubusercontent.com/Arivias/cc-lua/"..branch.."/locust/"..remote)
+	local r = http.get(cb("https://raw.githubusercontent.com/Arivias/cc-lua/"..branch.."/locust/"..remote))
 	if not r then
 		print("File(or branch) does not exist.")
 		return
@@ -22,7 +26,7 @@ if #args > 0 then
 	if args[1] == "update" then
 		do_install = false
 		print("Fetching latest version...")
-		local remote = http.get("https://raw.githubusercontent.com/Arivias/cc-lua/main/locust/installer.lua")
+		local remote = http.get(cb("https://raw.githubusercontent.com/Arivias/cc-lua/main/locust/installer.lua"))
 		local h = fs.open("locust-installer.lua","w")
 		r = remote.readAll()
 		if r then
