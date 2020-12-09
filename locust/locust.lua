@@ -7,7 +7,6 @@ pos = {} -- vector of coordinates
 rot = {} -- rotation, 0 = toward +x, 1 = toward +z, 2 = toward -x, 3 = toward -z (right turn is rot=(rot+1)%3)
 mode = {} -- harvest state
 target = {} -- position to begin harvest
-harvest_length = {} -- size of harvest
 y_offset = {} -- how high the local origin is above world origin, used for computing fuel cost
 at_bedrock = {} -- if we have completed a down dig
 rot_dir = {} -- spin dig direction
@@ -36,7 +35,6 @@ function loadState()
 		state[rot] = readNum(handle)
 		state[mode] = handle.readLine()
 		state[target] = vector.new(readNum(handle),readNum(handle),readNum(handle))
-		state[harvest_length] = readNum(handle)
 		state[y_offset] = readNum(handle)
 		state[at_bedrock] = readNum(handle)
 		state[rot_dir] = handle.readLine()
@@ -62,7 +60,6 @@ function saveState()
 	handle.writeLine(tostring(state[rot]))
 	handle.writeLine(state[mode])
 	handle.writeLine(tostring(state[target].x).."\n"..tostring(state[target].y).."\n"..tostring(state[target].z))
-	handle.writeLine(tostring(state[harvest_length]))
 	handle.writeLine(tostring(state[y_offset]))
 	handle.writeLine(tostring(state[at_bedrock]))
 	handle.writeLine(state[rot_dir])
@@ -181,7 +178,6 @@ while true do
 		while not fs.exists("disk/job") do sleep(0.1) end
 		handle = fs.open("disk/job","r")
 		state[target] = vector.new(readNum(handle),readNum(handle),readNum(handle))
-		state[harvest_length] = readNum(handle)
 		state[y_offset] = readNum(handle)
 		handle.close()
 		shell.run("rm disk/job")

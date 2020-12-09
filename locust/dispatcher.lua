@@ -12,7 +12,7 @@ x_grid = readNum(config) -- grid corner coords
 y_grid = readNum(config)
 z_grid = readNum(config)
 
-d_grid = readNum(config) -- (y) depth of desired area (should be negative)
+d_grid = readNum(config) -- (y) depth of desired area (should be negative) -- DOES NOTHING
 w_grid = readNum(config) -- (z) width of desired area
 l_grid = readNum(config) -- (x) length of desired area
 
@@ -31,7 +31,6 @@ for row = 1,l_grid+1 do
 		h.writeLine(tostring(y_grid))
 		h.writeLine(tostring(z))
 
-		h.writeLine(tostring(d_grid))
 		h.writeLine(tostring(y_spawn))
 
 		h.close()
