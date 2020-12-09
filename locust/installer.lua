@@ -6,7 +6,9 @@ local function install(remote, filename)
 	if not filename then filename = remote end
 	print("fetching "..filename.."...")
 	local handle = fs.open("disk/"..filename,"w")
-	handle.write(http.get("https://raw.githubusercontent.com/Arivias/cc-lua/main/locust/"..remote))
+	local r = http.get("https://raw.githubusercontent.com/Arivias/cc-lua/main/locust/"..remote)
+	handle.write(r.readAll())
+	r.close()
 	handle.close()
 end
 
@@ -14,7 +16,8 @@ if #args > 0 then
 	if args[1] == "update" then
 		print("Fetching latest version...")
 		local remote = http.get("https://raw.githubusercontent.com/Arivias/cc-lua/main/locust/installer.lua")
-		local version = tonumber(string.gfind(remote,"local VERSION=\"(.*)\"--REGEX MATCH THIS"))
+		local version = tonumber(string.gfind(remote.readAll(),"local VERSION=\"(.*)\"--REGEX MATCH THIS"))
+		remote.close()
 		if version > tonumber(VERSION) then
 			print("Updating...")
 			local h = fs.open("locust-installer.lua","w")
