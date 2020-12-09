@@ -2,7 +2,7 @@ function readNum(h)
 	return tonumber(h.readLine())
 end
 
-print("Locust Dispatcher 2.0a1")
+print("Locust Dispatcher 2.0a2")
 
 if fs.exists("/disk/job") then shell.run("rm /disk/job") end
 
