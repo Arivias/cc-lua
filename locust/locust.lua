@@ -156,7 +156,7 @@ end
 
 --compute the fuel required for a given job
 function computeFuelCost()
-	cost = state[target]:dot(vector.new(2,2,2)) + state[harvest_length]*2 + state[target].y+state[y_offset]*2*state[harvest_length]
+	cost = state[target]:dot(vector.new(2,2,2)) + state[target].y+state[y_offset]*2
 	return cost + 10 -- add a little wiggle room
 end
 
