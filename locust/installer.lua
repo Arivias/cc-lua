@@ -34,5 +34,5 @@ else
 	print("Installing locust to disk...")
 	install("locust.lua", "startup.lua")
 	install("dispatcher.lua")
-	install("blacklist)
+	install("blacklist")
 end
