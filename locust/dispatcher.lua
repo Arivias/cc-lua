@@ -4,7 +4,7 @@ end
 
 print("Locust Dispatcher 2.0a")
 
-config = fs.open("disk/cfg","r")
+config = fs.open("/disk/cfg","r")
 
 y_spawn = readNum(config) -- global y of
 
@@ -35,9 +35,9 @@ for row = 1,l_grid+1 do
 
 		h.close()
 
-		while fs.exists("disk/job") do sleep(0.5) end
+		while fs.exists("/disk/job") do sleep(0.5) end
 
-		shell.run("mv ../job ../disk/job")
+		shell.run("mv /job /disk/job")
 
 	end
 end
