@@ -1,5 +1,5 @@
 h=fs.open("locust-installer.lua","w")
-r=http.get("https://raw.githubusercontent.com/Arivias/cc-lua/main/locust/installer.lua")
+r=http.get("https://raw.githubusercontent.com/Arivias/cc-lua/master/locust/installer.lua")
 h.write(r.readAll())
 r.close()
 h.close()

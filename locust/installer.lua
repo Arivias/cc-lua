@@ -1,7 +1,7 @@
 local args = {...}
 local version = "1.43"
 
-local branch = "main"
+local branch = "master"
 local do_install = true
 
 local function cb(url)
@@ -26,7 +26,7 @@ if #args > 0 then
 	if args[1] == "update" then
 		do_install = false
 		print("Fetching latest version...")
-		local remote = http.get(cb("https://raw.githubusercontent.com/Arivias/cc-lua/main/locust/installer.lua"))
+		local remote = http.get(cb("https://raw.githubusercontent.com/Arivias/cc-lua/master/locust/installer.lua"))
 		local h = fs.open("locust-installer.lua","w")
 		r = remote.readAll()
 		if r then
