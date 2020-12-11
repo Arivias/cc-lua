@@ -32,7 +32,7 @@ for row = 1,w_grid do
 
 		h = fs.open("job","w")
 
-		if x <= x_grid + l_grid and z <= z_grid + w_grid
+		if x <= x_grid + l_grid and z <= z_grid + w_grid then
 			h.writeLine(tostring(x))
 			h.writeLine(tostring(y_grid))
 			h.writeLine(tostring(z))
