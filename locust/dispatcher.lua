@@ -2,6 +2,10 @@ function readNum(h)
 	return tonumber(h.readLine())
 end
 
+function readStr(h)
+	return tostring(h.readLine())
+end
+
 print("Locust Dispatcher ~ 2.02q EXPERIMENTAL:quarry")
 
 if fs.exists("/disk/job") then shell.run("rm /disk/job") end
