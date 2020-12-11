@@ -2,7 +2,7 @@ function readNum(h)
 	return tonumber(h.readLine())
 end
 
-print("Locust Dispatcher ~ 2.02q EXPERIMENTAL:quarry")
+print("Locust Dispatcher 2.0a2q - EXPERIMENTAL")
 
 if fs.exists("/disk/job") then shell.run("rm /disk/job") end
 
@@ -15,7 +15,7 @@ y_grid = readNum(config)
 z_grid = readNum(config)
 
 w_grid = readNum(config) -- (z) width of desired area
-l_grid = readNum(config) -- (x) length of desired area
+l_grid = math.ceil(readNum(config)/5) -- (x) length of desired area
 
 config.close()
 
@@ -26,9 +26,9 @@ for row = 1,w_grid do
 		x = x_grid + 5*(col-1) + (2*(row-1)%5)
 		z = z_grid + row-1
 
-		if  not(x>(x_grid+l_grid) or z>(z_grid+w_grid)) then
-			h = fs.open("job","w")
+		h = fs.open("job","w")
 
+		if x <= x_grid + l_grid and z <= z_grid + w_grid
 			h.writeLine(tostring(x))
 			h.writeLine(tostring(y_grid))
 			h.writeLine(tostring(z))
@@ -36,11 +36,10 @@ for row = 1,w_grid do
 			h.writeLine(tostring(y_spawn))
 
 			h.close()
+
+			while fs.exists("/disk/job") do sleep(0.5) end
+
+			shell.run("mv /job /disk/job")
 		end
-
-		while fs.exists("/disk/job") do sleep(0.5) end
-
-		shell.run("mv /job /disk/job")
-
 	end
 end

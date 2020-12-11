@@ -30,7 +30,7 @@ if mode == "quarry"
 	y2 = readNum(config)
 	x2 = readNum(config)
 
-	chunk_size = reaNum(config) -- area each turtle mines
+	r = reaNum(config) -- area each turtle mines
 
 	config.close()
 
@@ -39,11 +39,11 @@ if mode == "quarry"
 	zdif = math.abs(z1 - z2)
 
 	--create job file
-	for row = 1,math.floor(xdif/chunk_size) do
-		for col = 1,math.floor(zdif/chunk_size) do
+	for row = 1,math.floor(xdif/r) do
+		for col = 1,math.floor(zdif/r) do
 
-			xj1 = ((row-1)*chunk_size)+1
-			zj1 = ((col-1)*chunk_size)+1
+			xj1 = ((row-1)*r)+1
+			zj1 = ((col-1)*r)+1
 
 			xj2 =
 
@@ -60,6 +60,8 @@ if mode == "quarry"
 			h.writeLine(tostring(xj2)) -- job endpoint
 			h.writeLine(tostring(yj2))
 			h.writeLine(tostring(zj2))
+
+			h.writeLine(tostring(r))  --chunk size
 
 
 			h.close()
