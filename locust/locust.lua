@@ -133,6 +133,8 @@ function mineDown()
 				end
 			end
 			return success
+		else
+			turtle.attackDown()
 		end
 	end
 end
