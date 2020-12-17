@@ -160,7 +160,11 @@ end
 
 --compute the fuel required for a given job
 function computeFuelCost()
-	cost = state[target]:dot(vector.new(2,2,2)) + (state[target].y+state[y_offset])*2
+	cost = 0
+	cost = cost + math.abs(state[target].x)*2
+	cost = cost + math.abs(state[target].y)*2
+	cost = cost + math.abs(state[target].z)*2
+	cost = cost + (state[target].y+state[y_offset])*2
 	return cost + 10 -- add a little wiggle room
 end
 
