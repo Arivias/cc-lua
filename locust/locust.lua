@@ -187,12 +187,12 @@ loadBlacklist()
 
 while true do
 	if state[mode] == "awaiting_instructions" then -- await instructions from dispatcher
-		while not fs.exists("disk/job") do sleep(0.1) end
-		handle = fs.open("disk/job","r")
+		while not fs.exists("/disk/job") do sleep(0.1) end
+		handle = fs.open("/disk/job","r")
 		state[target] = vector.new(readNum(handle),readNum(handle),readNum(handle))
 		state[y_offset] = readNum(handle)
 		handle.close()
-		shell.run("rm disk/job")
+		shell.run("rm /disk/job")
 		state[mode] = "loading_fuel"
 		saveState()
 
@@ -326,7 +326,9 @@ while true do
 			forward()
 		else
 			if state[block_reset] == 0 then
-				shell.run("rm state")
+				shell.run("rm /state")
+				shell.run("rm /blacklist")
+				shell.run("rm /startup.lua")
 				shell.run("restart")
 			else
 				state[mode] = "loading_fuel"
