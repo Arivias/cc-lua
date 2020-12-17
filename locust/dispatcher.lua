@@ -26,19 +26,21 @@ for row = 1,w_grid do
 		x = x_grid + 5*(col-1) + (2*(row-1)%5)
 		z = z_grid + row-1
 
-		h = fs.open("job","w")
 
-		h.writeLine(tostring(x))
-		h.writeLine(tostring(y_grid))
-		h.writeLine(tostring(z))
+		if x <= (x_grid + l_grid*5) and z <= (z_grid + w_grid) then
+			h = fs.open("job","w")
 
-		h.writeLine(tostring(y_spawn))
+			h.writeLine(tostring(x))
+			h.writeLine(tostring(y_grid))
+			h.writeLine(tostring(z))
 
-		h.close()
+			h.writeLine(tostring(y_spawn))
 
-		while fs.exists("/disk/job") do sleep(0.5) end
+			h.close()
 
-		shell.run("mv /job /disk/job")
+			while fs.exists("/disk/job") do sleep(0.5) end
 
+			shell.run("mv /job /disk/job")
+		end
 	end
 end
