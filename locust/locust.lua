@@ -310,7 +310,7 @@ while true do
 			turtle.select(i)
 			turtle.dropDown()
 		end
-		state[mode] == "end_reorient"
+		state[mode] = "end_reorient"
 		saveState()
 	
 	elseif state[mode] == "end_reorient" then
