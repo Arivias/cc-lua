@@ -11,6 +11,7 @@ y_offset = {} -- how high the local origin is above world origin, used for compu
 at_bedrock = {} -- if we have completed a down dig
 rot_dir = {} -- spin dig direction
 level_spin_count = {}
+block_reset = {}
 
 --Load the blacklist from storage
 function loadBlacklist()
@@ -40,6 +41,7 @@ function loadState()
 		state[at_bedrock] = readNum(handle)
 		state[rot_dir] = handle.readLine()
 		state[level_spin_count] = readNum(handle)
+		state[block_reset] = readNum(handle)
 		handle.close()
 	else
 		state[pos] = vector.new(0,0,0)
@@ -49,6 +51,7 @@ function loadState()
 		state[at_bedrock] = 0
 		state[rot_dir] = "r"
 		state[level_spin_count] = 0
+		state[block_reset] = 0
 
 		--first time install
 		shell.run("cp disk/startup.lua startup.lua")
@@ -67,6 +70,7 @@ function saveState()
 	handle.writeLine(tostring(state[at_bedrock]))
 	handle.writeLine(state[rot_dir])
 	handle.writeLine(tostring(state[level_spin_count]))
+	handle.writeLine(tostring(state[block_reset]))
 	handle.close()
 end
 
@@ -156,7 +160,7 @@ end
 
 --compute the fuel required for a given job
 function computeFuelCost()
-	cost = state[target]:dot(vector.new(2,2,2)) + state[target].y+state[y_offset]*2
+	cost = state[target]:dot(vector.new(2,2,2)) + (state[target].y+state[y_offset])*2
 	return cost + 10 -- add a little wiggle room
 end
 
@@ -183,12 +187,12 @@ loadBlacklist()
 
 while true do
 	if state[mode] == "awaiting_instructions" then -- await instructions from dispatcher
-		while not fs.exists("disk/job") do sleep(0.1) end
-		handle = fs.open("disk/job","r")
+		while not fs.exists("/disk/job") do sleep(0.1) end
+		handle = fs.open("/disk/job","r")
 		state[target] = vector.new(readNum(handle),readNum(handle),readNum(handle))
 		state[y_offset] = readNum(handle)
 		handle.close()
-		shell.run("rm disk/job")
+		shell.run("rm /disk/job")
 		state[mode] = "loading_fuel"
 		saveState()
 
@@ -295,10 +299,42 @@ while true do
 	
 	elseif state[mode] == "return_y" then
 		if state[pos].y <= 0 then
-			state[mode] = "DONE"
+			state[mode] = "end_dump"
 			saveState()
+		else
+			down()
 		end
-		down()
+
+	elseif state[mode] == "end_dump" then
+		for i=1,16 do
+			turtle.select(i)
+			turtle.dropDown()
+		end
+		state[mode] = "end_reorient"
+		saveState()
+	
+	elseif state[mode] == "end_reorient" then
+		if state[rot] == 0 then
+			state[mode] = "end_return_home" -- todo: drop stuff
+			saveState()
+		elseif state[rot] == 1 then
+			turnLeft()
+		else turnRight() end
+
+	elseif state[mode] == "end_return_home" then
+		if state[pos].x < 0 then
+			forward()
+		else
+			if state[block_reset] == 0 then
+				shell.run("rm /state")
+				shell.run("rm /blacklist")
+				shell.run("rm /startup.lua")
+				shell.run("reboot")
+			else
+				state[mode] = "loading_fuel"
+				saveState()
+			end
+		end
 
 	elseif state[mode] == "DONE" then
 		break
