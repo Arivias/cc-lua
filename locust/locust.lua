@@ -329,7 +329,7 @@ while true do
 				shell.run("rm /state")
 				shell.run("rm /blacklist")
 				shell.run("rm /startup.lua")
-				shell.run("restart")
+				shell.run("reboot")
 			else
 				state[mode] = "loading_fuel"
 				saveState()
