@@ -317,7 +317,7 @@ while true do
 		if state[rot] == 0 then
 			state[mode] = "end_return_home" -- todo: drop stuff
 			saveState()
-		elseif state[rot] = 1 then
+		elseif state[rot] == 1 then
 			turnLeft()
 		else turnRight() end
 
